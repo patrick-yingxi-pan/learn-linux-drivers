@@ -28,7 +28,6 @@ ssize_t char_read(struct file *filp, char __user *buff, size_t count, loff_t *of
 {
 	char *p;
 	int err;
-	ssize_t retval = 0;
 
 	printk("char_read(%zu)\n", count);
 	p = kmalloc(count, GFP_KERNEL);
@@ -40,7 +39,7 @@ ssize_t char_read(struct file *filp, char __user *buff, size_t count, loff_t *of
 	memset(p, (long)filp->private_data, count);
 	err = copy_to_user(buff, p, count);
 	if (err)
-		retval = -EFAULT;
+		return -EFAULT;
 
 	kfree(p);
 	return count;
